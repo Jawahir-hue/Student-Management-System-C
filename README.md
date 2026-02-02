@@ -36,4 +36,4 @@ It demonstrates key concepts like **structs, arrays, unions, file handling, and 
 
 1. **Clone the repository**  
    ```bash
-   git clone https://github.com/yourusername/student-management-system.git
+   git clone https://github.com/Jawahir-hue/Student-Management-System-C

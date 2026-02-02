@@ -1,0 +1,187 @@
+1. What is this project
+This program is called
+Student Management System
+It is like a small school notebook inside the computer.
+It can
+• Save students
+• Show them
+• Find them
+• Update them
+• Delete them
+• Sort them
+• Save them to file
+• Load them again
+So your computer becomes a tiny school office.
+________________________________________
+2. What is a program
+A program is just instructions for the computer.
+Like
+Open book
+Read page
+Write name
+Calculate marks
+C plus plus just uses special English words to give these instructions.
+________________________________________
+3. What is this part
+#include <iostream>
+#include <string>
+#include <fstream>
+using namespace std;
+This means
+Hey computer, I want to use
+• screen input output
+• text like names
+• files
+It is like telling the computer
+Give me paper, pen and a notebook.
+________________________________________
+4. These two lines
+#define SUBJECTS 5
+#define MAX 100
+This means
+Each student has 5 subjects
+We can store maximum 100 students
+So the program knows the limits.
+________________________________________
+5. What is union
+union Result {
+    float percentage;
+    float gpa;
+};
+Think of union like one box.
+This box can store
+Either percentage
+Or GPA
+Not both at same time.
+We use it because teacher told in project to use union.
+________________________________________
+6. What is struct
+struct Student {
+    int id;
+    string name;
+    float marks[SUBJECTS];
+    float average;
+    char grade;
+    Result result;
+};
+A struct is like a student form.
+Inside one student we keep
+ID
+Name
+5 marks
+Average
+Grade
+Percentage
+So one student is one complete record.
+________________________________________
+7. This is memory
+Student students[MAX];
+int total = 0;
+This creates space for 100 students.
+total means how many students are stored right now.
+At start it is 0.
+________________________________________
+8. This function
+float calculateAverage(float m[])
+This adds all marks and divides by 5.
+It is like
+(80 + 70 + 90 + 60 + 75) / 5
+So computer does math for us.
+________________________________________
+9. This function
+char calculateGrade(float avg)
+If average is
+90 or more = A
+80 or more = B
+70 or more = C
+60 or more = D
+Else = F
+So grade is decided.
+________________________________________
+10. Add student
+This function asks
+Enter ID
+Enter name
+Enter 5 marks
+Then it
+Calculates average
+Calculates grade
+Stores it inside students array
+So new student is saved in memory.
+________________________________________
+11. Pointer
+void displayStudent(Student* s)
+Pointer means
+Instead of copying student
+We send its address
+Like pointing your finger to a page instead of copying the whole book.
+So it is faster.
+________________________________________
+12. Search
+When we search by ID or name
+The program goes through every student
+One by one
+Until it finds match
+This is like looking through a list.
+________________________________________
+13. Update
+When you update
+It finds student
+Asks new marks
+Recalculates average and grade
+So marks change.
+________________________________________
+14. Delete
+When deleting
+It removes that student
+And shifts others up
+Like removing one paper from middle of a file.
+________________________________________
+15. Sorting
+Sort by average
+Means highest marks first
+Sort by name
+Means A to Z order
+So data becomes clean.
+________________________________________
+16. File save
+ofstream file("students.txt");
+This creates a real file on computer.
+All student data is written inside it.
+So when program closes
+Data is not lost.
+________________________________________
+17. Load
+ifstream file("students.txt");
+This reads back the file.
+So students come back when you run program again.
+________________________________________
+18. Menu
+The menu is just a list of options.
+You type
+1
+2
+3
+And computer does that work.
+________________________________________
+19. Main function
+This is where program starts.
+It keeps showing menu
+Until you choose Exit.
+________________________________________
+20. What you learned
+From this one project you learned
+• variables
+• arrays
+• functions
+• loops
+• structures
+• union
+• pointers
+• file handling
+• searching
+• sorting
+• real software logic
+This is not small.
+This is big.
+

@@ -1,0 +1,266 @@
+1. Libraries and setup
+#include <iostream>
+#include <string>
+#include <fstream>
+using namespace std;
+•	#include <iostream> → lets us print to screen and take input (cout and cin).
+•	#include <string> → lets us use text strings, like names of students.
+•	#include <fstream> → lets us save data to a file and load it later.
+•	using namespace std; → avoids writing std:: before cin, cout, string, etc.
+________________________________________
+2. Constants
+#define SUBJECTS 5
+#define MAX 100
+•	SUBJECTS = 5 → every student has 5 subjects.
+•	MAX = 100 → maximum number of students we can store in memory.
+This makes code flexible. If tomorrow you want 6 subjects, just change one line.
+________________________________________
+3. Union
+union Result {
+    float percentage;
+    float gpa;
+};
+•	Union is like a box. You can store one value at a time.
+•	In this project, we store either percentage or GPA, not both.
+•	Later, we use s.result.percentage = s.average; to store percentage in the union.
+________________________________________
+4. Struct
+struct Student {
+    int id;
+    string name;
+    float marks[SUBJECTS];
+    float average;
+    char grade;
+    Result result;
+};
+•	Struct = a container for one student’s all data.
+•	id → student ID
+•	name → student name
+•	marks[SUBJECTS] → marks of 5 subjects
+•	average → average marks
+•	grade → grade (A/B/C...)
+•	result → union for percentage/GPA
+This is how we organize data nicely.
+________________________________________
+5. Global array and total
+Student students[MAX];
+int total = 0;
+•	students[MAX] → stores all students (up to 100).
+•	total → how many students are currently stored. Starts at 0.
+________________________________________
+6. Calculate average
+float calculateAverage(float m[]) {
+    float sum = 0;
+    for (int i = 0; i < SUBJECTS; i++)
+        sum += m[i];
+    return sum / SUBJECTS;
+}
+•	Adds all marks, divides by 5 → gives average.
+•	Example: marks = 80, 70, 90, 60, 75 → sum = 375 → avg = 375 / 5 = 75
+________________________________________
+7. Calculate grade
+char calculateGrade(float avg) {
+    if (avg >= 90) return 'A';
+    else if (avg >= 80) return 'B';
+    else if (avg >= 70) return 'C';
+    else if (avg >= 60) return 'D';
+    else return 'F';
+}
+•	If average >= 90 → A
+•	80–89 → B
+•	70–79 → C
+•	60–69 → D
+•	< 60 → F
+This is grading logic.
+________________________________________
+8. Add a student
+void addStudent() {
+    if (total >= MAX) {
+        cout << "Student limit reached\n";
+        return;
+    }
+
+    Student s;
+    cout << "Enter ID: "; cin >> s.id; cin.ignore();
+    cout << "Enter Name: "; getline(cin, s.name);
+    cout << "Enter marks of 5 subjects:\n";
+    for (int i = 0; i < SUBJECTS; i++) cin >> s.marks[i];
+
+    s.average = calculateAverage(s.marks);
+    s.grade = calculateGrade(s.average);
+    s.result.percentage = s.average;
+
+    students[total] = s;
+    total++;
+
+    cout << "Student added successfully\n";
+}
+•	Checks if total exceeds MAX → prevent overflow.
+•	Takes ID, Name, 5 marks.
+•	Calculates average, grade.
+•	Stores in union.
+•	Adds to global students[] array.
+•	Increments total.
+Think: it’s like filling a student form.
+________________________________________
+9. Display one student
+void displayStudent(Student* s) {
+    cout << "\nID: " << s->id;
+    cout << "\nName: " << s->name;
+    cout << "\nMarks: ";
+    for (int i = 0; i < SUBJECTS; i++) cout << s->marks[i] << " ";
+    cout << "\nAverage: " << s->average;
+    cout << "\nGrade: " << s->grade;
+    cout << "\nPercentage (union): " << s->result.percentage << endl;
+}
+•	Takes pointer to student. Pointer = address of student.
+•	Prints all data: ID, Name, Marks, Average, Grade, Percentage.
+________________________________________
+10. Display all students
+void displayAll() {
+    if (total == 0) {
+        cout << "No students found\n";
+        return;
+    }
+
+    for (int i = 0; i < total; i++) {
+        cout << "\n-------------------";
+        displayStudent(&students[i]);
+    }
+}
+•	Loops through all students and calls displayStudent().
+•	Shows everything on screen.
+________________________________________
+11. Search students
+By ID:
+int searchByID(int id) {
+    for (int i = 0; i < total; i++)
+        if (students[i].id == id) return i;
+    return -1;
+}
+•	Returns index of student in array.
+•	Returns -1 if not found.
+By Name:
+int searchByName(string name) {
+    for (int i = 0; i < total; i++)
+        if (students[i].name == name) return i;
+    return -1;
+}
+By Grade:
+void searchByGrade(char g) {
+    int found = 0;
+    for (int i = 0; i < total; i++)
+        if (students[i].grade == g) {
+            displayStudent(&students[i]);
+            found = 1;
+        }
+    if (!found) cout << "No student with this grade\n";
+}
+•	Loops through array, prints matching students.
+________________________________________
+12. Update student
+void updateStudent() {
+    int id;
+    cout << "Enter ID to update: "; cin >> id;
+    int index = searchByID(id);
+    if (index == -1) { cout << "Student not found\n"; return; }
+
+    cout << "Enter new marks:\n";
+    for (int i = 0; i < SUBJECTS; i++) cin >> students[index].marks[i];
+
+    students[index].average = calculateAverage(students[index].marks);
+    students[index].grade = calculateGrade(students[index].average);
+    students[index].result.percentage = students[index].average;
+
+    cout << "Student updated\n";
+}
+•	Finds student by ID
+•	Updates marks → recalculates average, grade
+•	Updates union
+________________________________________
+13. Delete student
+void deleteStudent() {
+    int id;
+    cout << "Enter ID to delete: "; cin >> id;
+    int index = searchByID(id);
+    if (index == -1) { cout << "Student not found\n"; return; }
+
+    for (int i = index; i < total - 1; i++)
+        students[i] = students[i + 1];
+
+    total--;
+    cout << "Student deleted\n";
+}
+•	Finds student
+•	Shifts all students left to fill the gap
+•	Reduces total by 1
+________________________________________
+14. Sort students
+By average:
+void sortByAverage() {
+    for (int i = 0; i < total - 1; i++)
+        for (int j = i + 1; j < total; j++)
+            if (students[i].average < students[j].average) swap(students[i], students[j]);
+    cout << "Sorted by average\n";
+}
+•	Compares all students
+•	Sorts highest average first
+By name:
+void sortByName() {
+    for (int i = 0; i < total - 1; i++)
+        for (int j = i + 1; j < total; j++)
+            if (students[i].name > students[j].name) swap(students[i], students[j]);
+    cout << "Sorted by name\n";
+}
+•	Alphabetical order
+________________________________________
+15. File handling
+Save to file:
+ofstream file("students.txt");
+file << total << endl;
+for each student → write all info
+•	Creates a file students.txt
+•	Writes total first → how many students
+•	Writes each student info line by line
+Load from file:
+ifstream file("students.txt");
+file >> total
+for each student → read info
+•	Reads the file back → loads students into memory
+________________________________________
+16. Menu
+void menu() {
+    cout << "\n1. Add Student\n2. Display All\n...12. Exit";
+}
+•	Prints menu options on screen
+•	Lets user choose what they want
+________________________________________
+17. Main function
+int main() {
+    int choice;
+    do {
+        menu();
+        cin >> choice;
+        switch(choice) {
+            case 1: addStudent(); break;
+            ...
+            case 12: cout << "Program closed\n"; break;
+            default: cout << "Invalid choice\n";
+        }
+    } while(choice != 12);
+    return 0;
+}
+•	Shows menu in loop
+•	Executes the chosen task
+•	Keeps running until user selects Exit (12)
+________________________________________
+✅ Step-by-step plan to understand this program
+1.	Start small: Try running only addStudent() and displayAll().
+2.	Understand array: See how students[] stores multiple students.
+3.	Play with search: Add students and try searchByID and searchByName.
+4.	Update & Delete: Test updating and deleting students.
+5.	Sort: Add multiple students → try sortByAverage & sortByName.
+6.	File handling: Save students → close program → load again → check data.
+7.	Unions: Understand result.percentage. Only one value is stored at a time.
+8.	Pointers: Look at displayStudent(Student* s). It prints the student by pointer.
+
